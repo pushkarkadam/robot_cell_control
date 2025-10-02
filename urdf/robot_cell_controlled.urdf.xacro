@@ -21,7 +21,11 @@
     <xacro:arg name="ur_output_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_output_recipe.txt"/>
     <xacro:arg name="ur_input_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_input_recipe.txt"/>
     <xacro:arg name="use_fake_hardware" default="false" />
-    <xacro:arg name="mock_sensor_commands" default="false" />
+    <xacro:arg name="fake_sensor_commands" default="false" />
+
+    <!--find hash_kinematics in kinematics_params-->
+    <xacro:property name="kinematics_params_file" value="$(arg kinematics_params)"/>
+    <xacro:property name="kinematics_hash" value="${xacro.load_yaml(kinematics_params_file)['kinematics']['hash']}"/>
 
     <link name="world"/>
     <!-- This will create the scene where the robot is located in -->
@@ -36,17 +40,17 @@
             <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:robot_cell>
 
-    <!-- Create the control tag for the UR robot -->
+    <!--Create the control tag for the UR robot-->
     <xacro:ur_ros2_control
         name="$(arg ur_type)"
         tf_prefix="$(arg ur_type)_"
-        kinematics_parameters_file="$(arg kinematics_parameters_file)"
+        hash_kinematics="${kinematics_hash}"
         robot_ip="$(arg robot_ip)"
         script_filename="$(arg ur_script_filename)"
         output_recipe_filename="$(arg ur_output_recipe_filename)"
         input_recipe_filename="$(arg ur_input_recipe_filename)"
         use_fake_hardware="$(arg use_fake_hardware)"
-        mock_sensor_commands="$(arg mock_sensor_commands)"
+        fake_sensor_commands="$(arg fake_sensor_commands)"
         headless_mode="$(arg headless_mode)"
     />
 
