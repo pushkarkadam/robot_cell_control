@@ -24,7 +24,7 @@
     <xacro:arg name="fake_sensor_commands" default="false" />
 
     <!--find hash_kinematics in kinematics_params-->
-    <xacro:property name="kinematics_params_file" value="$(arg kinematics_params)"/>
+    <xacro:property name="kinematics_params_file" value="$(arg kinematics_parameters_file)"/>
     <xacro:property name="kinematics_hash" value="${xacro.load_yaml(kinematics_params_file)['kinematics']['hash']}"/>
 
     <link name="world"/>
