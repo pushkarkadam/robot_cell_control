@@ -1,12 +1,14 @@
-from launch_ros.substitutions import FindPackageShare 
+from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
+    Command
 )
-
+from launch_ros.parameter_descriptions import ParameterValue
+from launch_ros.actions import Node
 
 def generate_launch_description():
     # declare arguments
@@ -42,14 +44,14 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
-            default_value="false",
+            default_value="true",
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "fake_sensor_commands",
-            default_value="false",
+            default_value="true",
             description="Enable fake command interfaces for sensors used for simple simulations. "
             "Used only if 'use_fake_hardware' parameter is true.",
         )
@@ -146,4 +148,24 @@ def generate_launch_description():
         }.items(),
     )
 
-    return LaunchDescription(declared_arguments + [base_launch])
+    description_package = FindPackageShare("robot_cell_control")
+    description_file = PathJoinSubstitution(
+        [description_package, "urdf", "robot_cell_controlled.urdf.xacro"]
+    )
+
+    robot_description = ParameterValue(
+        Command(["xacro ", description_file, " ", "ur_type:=", "ur10e"]), value_type=str
+    )
+
+    robot_state_publisher_node = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        parameters=[{"robot_description": robot_description}],
+    )
+
+    joint_state_publisher_node = Node(
+        package="joint_state_publisher",
+        executable="joint_state_publisher",
+    )
+
+    return LaunchDescription(declared_arguments + [base_launch]+ [robot_state_publisher_node, joint_state_publisher_node])
