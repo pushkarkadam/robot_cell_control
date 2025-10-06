@@ -34,7 +34,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "robot_ip",
-            default_value="0.0.0.0",  # put your robot's IP address here
+            default_value="196.168.255.10",  # put your robot's IP address here
             description="IP address by which the robot can be reached.",
         )
     )
@@ -44,14 +44,14 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
-            default_value="true",
+            default_value="false",
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "fake_sensor_commands",
-            default_value="true",
+            default_value="false",
             description="Enable fake command interfaces for sensors used for simple simulations. "
             "Used only if 'use_fake_hardware' parameter is true.",
         )
@@ -135,7 +135,6 @@ def generate_launch_description():
         launch_arguments={
             "ur_type": ur_type,
             "robot_ip": robot_ip,
-            "tf_prefix": [LaunchConfiguration("ur_type"), "_"],
             "launch_rviz": launch_rviz,
             "use_fake_hardware": use_fake_hardware,
             "fake_sensor_commands": fake_sensor_commands,
@@ -166,15 +165,9 @@ def generate_launch_description():
     joint_state_publisher_node = Node(
         package="joint_state_publisher",
         executable="joint_state_publisher",
-        parameters=[
+        parameters = [
             {
-                'zeros.ur10e_shoulder_pan_joint': -0.07,
-                'zeros.ur10e_shoulder_lift_joint': -2.28,
-                'zeros.ur10e_elbow_joint': -1.28,
-                'zeros.ur10e_wrist_1_joint': -0.07,
-                'zeros.ur10e_wrist_2_joint': 1.64,
-                'zeros.ur10e_wrist_3_joint': 1.57,
-                'zeros.ur10e_robotiq_85_left_knuckle_joint': 0.632
+                'zeros.robotiq_85_left_knuckle_joint': 0.632
             }
         ]
     )
