@@ -128,8 +128,13 @@ def generate_launch_description():
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
-                PathJoinSubstitution([FindPackageShare("ur_robot_driver"), "launch"]),
-                "/ur_control.launch.py",
+                PathJoinSubstitution(
+                    [
+                        FindPackageShare("ur_robot_driver"), 
+                        "launch",
+                        "ur_control.launch.py"
+                    ]
+                ),
             ]
         ),
         launch_arguments={
@@ -156,12 +161,6 @@ def generate_launch_description():
         Command(["xacro ", description_file, " ", "ur_type:=", "ur10e"]), value_type=str
     )
 
-    robot_state_publisher_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        parameters=[{"robot_description": robot_description}],
-    )
-
     joint_state_publisher_node = Node(
         package="joint_state_publisher",
         executable="joint_state_publisher",
@@ -172,4 +171,4 @@ def generate_launch_description():
         ]
     )
 
-    return LaunchDescription(declared_arguments + [base_launch]+ [robot_state_publisher_node, joint_state_publisher_node])
+    return LaunchDescription(declared_arguments + [base_launch]+ [joint_state_publisher_node])
