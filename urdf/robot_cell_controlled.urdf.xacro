@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<robot name="robot_cell" xmlns:xacro="https://ros.org/wiki/xacro">
+<robot name="robot_cell" xmlns:xacro="http://ros.org/wiki/xacro">
     
-    <!-- Including the maxro from custom description -->
+    <!-- Including the macro from custom description -->
     <xacro:include filename="$(find robot_cell_description)/urdf/robot_cell_macro.xacro"/>
 
     <!-- The driver already provides a control tag for the UR arm, we can directly include -->
