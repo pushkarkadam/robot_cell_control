@@ -44,7 +44,7 @@
     <!--Create the control tag for the UR robot-->
     <xacro:ur_ros2_control
         name="$(arg ur_type)"
-        tf_prefix=""
+        tf_prefix="$(arg ur_type)_"
         hash_kinematics="${kinematics_hash}"
         robot_ip="$(arg robot_ip)"
         script_filename="$(arg ur_script_filename)"
