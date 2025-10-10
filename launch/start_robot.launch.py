@@ -128,18 +128,14 @@ def generate_launch_description():
     base_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [
-                PathJoinSubstitution(
-                    [
-                        FindPackageShare("ur_robot_driver"), 
-                        "launch",
-                        "ur_control.launch.py"
-                    ]
-                ),
+                PathJoinSubstitution([FindPackageShare("ur_robot_driver"), "launch"]),
+                        "/ur_control.launch.py"
             ]
         ),
         launch_arguments={
             "ur_type": ur_type,
             "robot_ip": robot_ip,
+            "tf_prefix": [""],
             "launch_rviz": launch_rviz,
             "use_fake_hardware": use_fake_hardware,
             "fake_sensor_commands": fake_sensor_commands,
@@ -150,15 +146,6 @@ def generate_launch_description():
             "activate_joint_controller": activate_joint_controller,
             "headless_mode": headless_mode,
         }.items(),
-    )
-
-    description_package = FindPackageShare("robot_cell_control")
-    description_file = PathJoinSubstitution(
-        [description_package, "urdf", "robot_cell_controlled.urdf.xacro"]
-    )
-
-    robot_description = ParameterValue(
-        Command(["xacro ", description_file, " ", "ur_type:=", "ur10e"]), value_type=str
     )
 
     joint_state_publisher_node = Node(
