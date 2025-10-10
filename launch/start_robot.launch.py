@@ -5,10 +5,8 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
-    Command
 )
-from launch_ros.parameter_descriptions import ParameterValue
-from launch_ros.actions import Node
+
 
 def generate_launch_description():
     # declare arguments
@@ -135,6 +133,7 @@ def generate_launch_description():
         launch_arguments={
             "ur_type": ur_type,
             "robot_ip": robot_ip,
+            "tf_prefix": [LaunchConfiguration("ur_type"), "_"],
             "launch_rviz": launch_rviz,
             "use_fake_hardware": use_fake_hardware,
             "fake_sensor_commands": fake_sensor_commands,
@@ -147,29 +146,4 @@ def generate_launch_description():
         }.items(),
     )
 
-    description_package = FindPackageShare("robot_cell_control")
-    description_file = PathJoinSubstitution(
-        [description_package, "urdf", "robot_cell_controlled.urdf.xacro"]
-    )
-
-    robot_description = ParameterValue(
-        Command(["xacro ", description_file, " ", "ur_type:=", "ur10e"]), value_type=str
-    )
-
-    robot_state_publisher_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        parameters=[{"robot_description": robot_description}],
-    )
-
-    joint_state_publisher_node = Node(
-        package="joint_state_publisher",
-        executable="joint_state_publisher",
-        parameters = [
-            {
-                'zeros.robotiq_85_left_knuckle_joint': 0.632
-            }
-        ]
-    )
-
-    return LaunchDescription(declared_arguments + [base_launch]+ [robot_state_publisher_node, joint_state_publisher_node])
+    return LaunchDescription(declared_arguments + [base_launch])
