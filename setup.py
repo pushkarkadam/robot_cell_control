@@ -16,6 +16,7 @@ setup(
         (os.path.join('share', package_name, 'urdf'), glob('urdf/*.xacro')),
         (os.path.join('share', package_name, 'config', 'ur10e'), glob('config/ur10e/*.yaml')),
         (os.path.join('share', package_name, 'rviz'), glob('rviz/*')),
+        (os.path.join('share', package_name, 'config'), glob('config/my_robot_calibration.yaml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
