@@ -32,7 +32,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "robot_ip",
-            default_value="196.168.255.10",  # put your robot's IP address here
+            default_value="0.0.0.0",  # put your robot's IP address here
             description="IP address by which the robot can be reached.",
         )
     )
@@ -42,14 +42,14 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
-            default_value="false",
+            default_value="true",
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             "fake_sensor_commands",
-            default_value="false",
+            default_value="true",
             description="Enable fake command interfaces for sensors used for simple simulations. "
             "Used only if 'use_fake_hardware' parameter is true.",
         )
